@@ -122,7 +122,19 @@ dialog::backdrop { background: rgba(24, 31, 64, 0.72); }
 .dlg-foot { display: flex; justify-content: flex-end; margin-top: 1.25rem; }
 
 #confetti { position: fixed; inset: 0; z-index: 50; pointer-events: none; }
+
+.scene { position: fixed; inset: 0; z-index: -1; opacity: 0; transition: opacity 0.8s ease;
+  background: linear-gradient(rgba(47, 61, 111, 0.86), rgba(47, 61, 111, 0.95)), url(assets/y4.png) center / cover no-repeat; }
+.scene.on { opacity: 1; }
+.btn.light { background: var(--tan); color: var(--navy); border-color: var(--tan); }
+.banner { display: block; width: 100%; height: 10rem; object-fit: cover; object-position: 50% 35%; margin: 0 0 1.1rem; }
+.lead-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.4rem; }
+.lead-row p { margin: 0 0 0.9rem; }
+.lead-row .side { width: 11rem; height: 8rem; object-fit: cover; flex: none; max-width: 42%; }
+@media (max-width: 560px) { .banner { height: 8rem; } }
 </style>
+
+<div class="scene" id="scene" aria-hidden="true"></div>
 
 <main style="display:contents">
   <section id="welcome" class="screen fade" aria-live="polite">
@@ -130,10 +142,17 @@ dialog::backdrop { background: rgba(24, 31, 64, 0.72); }
     <h1>Welcome to the Jamestown University team</h1>
   </section>
 
-  <section id="pick" class="screen" hidden>
+  <section id="begin" class="screen" hidden>
     <div class="rule"></div>
     <p class="lead fade" id="lead">Please complete this quick orientation to get settled into your new role. This will take less than 5 minutes. You are encouraged to take notes.</p>
-    <div class="depts fade" id="depts" role="group" aria-label="Choose your department" inert></div>
+    <button class="btn light fade" id="start" type="button" inert><span>Start orientation</span></button>
+  </section>
+
+  <section id="pick" class="screen" hidden>
+    <div class="rule"></div>
+    <p class="lead">General information complete. Now choose your department to see the onboarding for your role.</p>
+    <div class="depts" id="depts" role="group" aria-label="Choose your department"></div>
+    <p style="margin-top:1.25rem"><button class="linkbtn" id="pick-back" type="button">Back to general information</button></p>
   </section>
 
   <section id="step" class="screen" hidden>
@@ -193,6 +212,8 @@ dialog::backdrop { background: rgba(24, 31, 64, 0.72); }
   var $ = function (s) { return document.querySelector(s); };
   var a = function (h, t) { return '<a href="' + h + '" target="_blank" rel="noopener noreferrer">' + t + '</a>'; };
   var ch = function (t) { return '<span class="ch">' + t + '</span>'; };
+  var banner = function (src, alt) { return '<img class="banner" src="' + src + '" alt="' + alt + '">'; };
+  var side = function (src, alt) { return '<img class="side" src="' + src + '" alt="' + alt + '">'; };
   var rows = function (list) {
     return '<dl class="rows">' + list.map(function (r) {
       return '<div class="row"><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>';
@@ -213,17 +234,19 @@ dialog::backdrop { background: rgba(24, 31, 64, 0.72); }
 
   var general = [
     { title: 'About Jamestown University', html:
+      banner('assets/image.png', 'Two Jamestown University graduates') +
       '<p>Jamestown University (JU) was established in 2025 by NolanSkadden to address the growing shortage of qualified legal professionals in ro-states.</p>' +
       '<p>It was originally conceived to foster community and rehabilitation, not to serve solely as an educational institution.</p>' +
       '<p>JU has four departments: Administration (the central university staff), the School of Business, the School of Law and the School of Aviation. Read the ' + ch('#information') + ' channel for more lore.</p>' },
     { title: 'Getting set up', html:
-      '<p>Follow these steps in order:</p><ol>' +
+      '<div class="lead-row"><p>Follow these steps in order:</p>' + side('assets/y6.png', 'A Jamestown University staff member at a desk, smiling') + '</div><ol>' +
       '<li>Make a ' + ch('#credentials-request') + '. Your Discord nickname must follow the naming guide in the first message of ' + ch('#staff-bulletin') + '.</li>' +
       '<li>Once you have your credentials, log in at ' + a(SITE, 'jamestownuniversityrblx.vercel.app') + '.</li>' +
       '<li>If you need level 1 or 2 access, make a separate ' + ch('#credentials-request') + '.</li>' +
       '<li>Review ' + ch('#staff-bulletin') + '. It holds all of the essential documents.</li>' +
       '<li>Join the ' + a(GROUP, 'JU Roblox group') + '. If you are not accepted within 48 hours, ping ' + ch('@University Leadership') + '.</li></ol>' },
     { title: 'How JU is organized', html:
+      '<div class="lead-row"><p>Leadership and staff fit together like this.</p>' + side('assets/pres.png', 'The University President at a JU event') + '</div>' +
       rows([
         ['Board of Governors', 'Appointed positions. The Board votes on leadership changes and institutional changes.'],
         ['President', 'Appointed chief executive of JU. The Chancellor is also appointed, in a non-administrative role.'],
@@ -251,10 +274,12 @@ dialog::backdrop { background: rgba(24, 31, 64, 0.72); }
     var chair = o.chair ? '<li>' + o.chair + '</li>' : '';
     return [
       { title: 'Your first tasks', html:
+        (o.img1 || '') +
         '<ol><li>Name yourself using the Naming Guide in ' + ch('#staff-bulletin') + '.</li>' +
         '<li>Learn your department’s programs and org chart.</li></ol>' +
         '<p>' + o.who + '</p>' },
       { title: 'Teaching and contributing', html:
+        (o.img2 || '') +
         '<ul><li>Hosting classes is optional but encouraged.</li>' +
         '<li>Substantial contributions to curriculum or teaching could be rewarded with a degree.</li>' +
         '<li>Associate Professors are part-time or junior positions. They help grade exams and papers, assist with classes and keep a presence. They are Level 0 and do not have staff panel access.</li>' +
@@ -320,6 +345,8 @@ dialog::backdrop { background: rgba(24, 31, 64, 0.72); }
       name: 'School of Aviation', tag: 'JU-SOA',
       blurb: 'Departments of Flight Operations and Aviation Management.',
       steps: profSteps({
+        img1: banner('assets/soa1.png', 'An airplane'),
+        img2: banner('assets/soa2.png', 'Another airplane'),
         who: 'JU-SOA has two departments: Flight Operations and Aviation Management.',
         chair: 'Each department is led by a Department Chair, who is responsible for their own department and can also help other departments within the school.'
       }),
@@ -391,7 +418,8 @@ dialog::backdrop { background: rgba(24, 31, 64, 0.72); }
   var dept = null, steps = [], idx = 0, done = {}, elapsed = 0, last = 0, raf = 0;
 
   function show(id) {
-    ['welcome', 'pick', 'step', 'finish'].forEach(function (s) { $('#' + s).hidden = (s !== id); });
+    ['welcome', 'begin', 'pick', 'step', 'finish'].forEach(function (s) { $('#' + s).hidden = (s !== id); });
+    $('#scene').classList.toggle('on', id === 'welcome' || id === 'begin');
   }
 
   $('#depts').innerHTML = Object.keys(DEPTS).map(function (k) {
@@ -400,35 +428,63 @@ dialog::backdrop { background: rgba(24, 31, 64, 0.72); }
   }).join('');
   $('#depts').addEventListener('click', function (e) {
     var b = e.target.closest('.dept');
-    if (b) begin(b.getAttribute('data-k'));
+    if (b) pickDept(b.getAttribute('data-k'));
   });
 
   function intro() {
     var w = $('#welcome'), f = rm ? 0 : 1200, hold = rm ? 1800 : 2600;
+    show('welcome');
     setTimeout(function () { w.classList.add('show'); }, 60);
     var t1 = 60 + f + hold;
     setTimeout(function () { w.classList.remove('show'); }, t1);
     var t2 = t1 + f + 250;
     setTimeout(function () {
-      show('pick');
+      show('begin');
       setTimeout(function () { $('#lead').classList.add('show'); }, 60);
     }, t2);
-    var t3 = t2 + 60 + f + (rm ? 600 : 2600);
+    var t3 = t2 + 60 + f + (rm ? 600 : 2200);
     setTimeout(function () {
-      var d = $('#depts'); d.inert = false; d.classList.add('show');
+      var s = $('#start'); s.inert = false; s.classList.add('show');
     }, t3);
   }
 
-  function begin(k) {
-    dept = DEPTS[k]; done = {}; idx = 0;
-    steps = [].concat(
-      general.map(function (s) { return { phase: 'General information', title: s.title, html: s.html }; }),
+  function generalSteps() {
+    return general.map(function (s) { return { phase: 'General information', title: s.title, html: s.html }; });
+  }
+  function fullSteps() {
+    return generalSteps().concat(
       dept.steps.map(function (s) { return { phase: 'Your role · ' + dept.name, title: s.title, html: s.html }; }),
       [{ phase: 'Contacts', title: 'Who to contact', html: contactsHtml(dept) }]
     );
-    $('#segs').innerHTML = steps.map(function (s, i) {
+  }
+  function buildSegs() {
+    var h = steps.map(function (s, i) {
       return '<span class="seg' + (i && steps[i - 1].phase !== s.phase ? ' gap' : '') + '"></span>';
     }).join('');
+    if (!dept) h += '<span class="seg gap"></span>';
+    $('#segs').innerHTML = h;
+  }
+
+  function startGeneral() {
+    dept = null; done = {}; idx = 0;
+    steps = generalSteps();
+    buildSegs();
+    show('step');
+    render();
+  }
+
+  function showPick() {
+    cancelAnimationFrame(raf);
+    show('pick');
+    window.scrollTo(0, 0);
+  }
+
+  function pickDept(k) {
+    dept = DEPTS[k];
+    Object.keys(done).forEach(function (key) { if (+key >= general.length) delete done[key]; });
+    steps = fullSteps();
+    idx = general.length;
+    buildSegs();
     show('step');
     render();
   }
@@ -438,12 +494,14 @@ dialog::backdrop { background: rgba(24, 31, 64, 0.72); }
     $('#phase').textContent = s.phase;
     $('#title').textContent = s.title;
     $('#body').innerHTML = s.html;
-    $('#count').textContent = 'Step ' + (idx + 1) + ' of ' + steps.length;
+    $('#count').textContent = dept
+      ? 'Part 2 of 2 · Step ' + (idx - general.length + 1) + ' of ' + (steps.length - general.length)
+      : 'Part 1 of 2 · Step ' + (idx + 1) + ' of ' + general.length;
     Array.prototype.forEach.call($('#segs').children, function (el, i) {
       el.className = 'seg' + (el.className.indexOf('gap') > -1 ? ' gap' : '') + (done[i] ? ' done' : '') + (i === idx ? ' cur' : '');
     });
-    $('#back').textContent = idx === 0 ? 'Change department' : 'Back';
-    $('#nextlabel').textContent = lastStep ? 'Finish orientation' : 'Continue';
+    $('#back').textContent = (dept && idx === general.length) ? 'Change department' : 'Back';
+    $('#nextlabel').textContent = lastStep ? (dept ? 'Finish orientation' : 'Choose department') : 'Continue';
     elapsed = 0;
     cancelAnimationFrame(raf);
     update();
@@ -471,19 +529,23 @@ dialog::backdrop { background: rgba(24, 31, 64, 0.72); }
     $('#next').disabled = !ok;
   }
 
+  $('#start').addEventListener('click', startGeneral);
   $('#next').addEventListener('click', function () {
     if (!done[idx]) return;
-    if (idx === steps.length - 1) { finish(); return; }
+    if (idx === steps.length - 1) { if (dept) finish(); else showPick(); return; }
     idx++; render();
   });
   $('#back').addEventListener('click', function () {
     cancelAnimationFrame(raf);
-    if (idx === 0) {
-      show('pick'); $('#lead').classList.add('show');
-      var d = $('#depts'); d.inert = false; d.classList.add('show');
-      return;
-    }
+    if (idx === 0) { show('begin'); return; }
+    if (dept && idx === general.length) { showPick(); return; }
     idx--; render();
+  });
+  $('#pick-back').addEventListener('click', function () {
+    dept = null; steps = generalSteps(); buildSegs();
+    idx = general.length - 1;
+    show('step');
+    render();
   });
   $('#review').addEventListener('click', function () { idx = 0; show('step'); render(); });
 
