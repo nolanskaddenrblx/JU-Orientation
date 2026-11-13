@@ -1,0 +1,531 @@
+<title>Jamestown University Orientation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&family=Source+Serif+4:wght@500;600&display=swap">
+<style>
+/* Layout: one centered column on navy. Intro and picker are open type; the steps sit on a light paper panel whose Continue button fills as the read-time runs. A footer bar holds privacy, cookies and links. */
+:root {
+  --navy: #2F3D6F;
+  --blue: #2850A8;
+  --tan: #DAC5B4;
+  --slate: #848FAC;
+  --paper: #EFE5DC;
+  --rule: rgba(47, 61, 111, 0.2);
+  --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --sans: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme: dark;
+}
+html { height: 100%; }
+body {
+  background: var(--navy);
+  color: var(--tan);
+  font: 400 16px/1.6 var(--sans);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-block: 1rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+img { border: 0; outline: 0; box-shadow: none; border-radius: 0; background: none; }
+.screen { width: 100%; max-width: 46rem; margin: auto; padding-block: 2rem; min-width: 0; }
+
+.fade { opacity: 0; transition: opacity 1.2s ease; }
+.fade.show { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .fade { transition: none; } }
+
+.rule { width: 3.5rem; height: 3px; background: var(--tan); margin-bottom: 1.5rem; }
+.mark { margin-bottom: 1.5rem; }
+.mark .rule { display: none; margin-bottom: 0; }
+.mark.nologo .rule { display: block; }
+.mark .logo { display: block; height: 5rem; width: auto; max-width: 100%; }
+h1 {
+  font: 600 clamp(2.1rem, 6.5vw, 3.6rem)/1.1 var(--serif);
+  margin: 0; text-wrap: balance; max-width: 16ch;
+}
+.lead { font-size: clamp(1.15rem, 2.6vw, 1.4rem); line-height: 1.55; margin: 0 0 2rem; max-width: 34rem; }
+
+.depts { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.875rem; }
+.dept {
+  font: inherit; text-align: left; color: var(--tan); background: transparent;
+  border: 1px solid var(--slate); border-radius: 6px; padding: 1.1rem 1.2rem; cursor: pointer;
+  display: flex; flex-direction: column; gap: 0.2rem; min-width: 0;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.dept:hover { background: var(--tan); color: var(--navy); border-color: var(--tan); }
+.dept b { font: 600 1.3rem/1.2 var(--serif); }
+.dept small { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.dept span { font-size: 0.9rem; line-height: 1.45; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--tan); outline-offset: 3px; }
+.panel button:focus-visible, .panel a:focus-visible, dialog button:focus-visible, dialog a:focus-visible { outline-color: var(--blue); }
+
+.top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.7rem; }
+.brand { display: flex; align-items: center; gap: 0.6rem; }
+.brand img { height: 1.75rem; width: auto; }
+.segs { display: flex; gap: 4px; margin-bottom: 1.1rem; }
+.seg { flex: 1; height: 4px; border-radius: 2px; background: rgba(218, 197, 180, 0.22); min-width: 0; }
+.seg.gap { margin-left: 0.5rem; }
+.seg.done { background: var(--tan); }
+.seg.cur { background: var(--slate); }
+
+.panel { background: var(--paper); color: var(--navy); border-radius: 8px; padding: clamp(1.25rem, 4vw, 2.25rem); }
+.eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); margin: 0; }
+.panel h2 { font: 600 clamp(1.5rem, 4vw, 1.95rem)/1.2 var(--serif); margin: 0.4rem 0 1rem; text-wrap: balance; }
+.panel h2:focus { outline: none; }
+.panel p { margin: 0 0 0.9rem; }
+.panel ul, .panel ol { margin: 0 0 0.9rem; padding-left: 1.3rem; }
+.panel li { margin-bottom: 0.4rem; padding-left: 0.2rem; }
+a { color: var(--blue); text-underline-offset: 2px; }
+.ch { background: rgba(40, 80, 168, 0.12); padding: 0.05em 0.4em; border-radius: 3px; font-weight: 600; white-space: nowrap; }
+.rows { margin: 0 0 0.5rem; }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); gap: 0.2rem 1.25rem; padding: 0.7rem 0; border-top: 1px solid var(--rule); }
+.row dt { font-weight: 700; }
+.row dd { margin: 0; }
+@media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+
+.contact-lead { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 0.4rem; }
+.contact-lead p { margin: 0 0 0.9rem; }
+.contact-lead img { height: 8.5rem; width: auto; max-width: 38%; object-fit: contain; flex: none; }
+
+.foot { margin-top: 1.5rem; display: flex; justify-content: flex-end; }
+.btn { font: inherit; font-weight: 600; padding: 0.7rem 1.4rem; border-radius: 6px; border: 2px solid var(--blue); background: var(--blue); color: #fff; cursor: pointer;
+  position: relative; overflow: hidden; transition: background 0.3s, border-color 0.3s, color 0.3s; }
+.btn span { position: relative; }
+.btn .fill { position: absolute; inset: 0; background: rgba(40, 80, 168, 0.18); transform-origin: left center; transform: scaleX(0); transition: opacity 0.3s; }
+.btn[disabled] { background: transparent; color: var(--navy); border-color: var(--slate); cursor: default; }
+.btn:not([disabled]) .fill { opacity: 0; }
+.btn.ghost { background: transparent; border-color: transparent; color: var(--navy); text-decoration: underline; text-underline-offset: 3px; padding-inline: 0.4rem; }
+.foot { justify-content: space-between; align-items: center; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.finish-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1.5rem; align-items: end; }
+.finish-grid .grad { max-height: 24rem; width: auto; max-width: 100%; justify-self: center; }
+@media (max-width: 640px) { .finish-grid { grid-template-columns: 1fr; } .finish-grid .grad { max-height: 15rem; } }
+
+.bar { width: 100%; max-width: 46rem; margin: 1rem auto 0; padding-top: 1rem; border-top: 1px solid rgba(218, 197, 180, 0.22);
+  display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+.bar .brand { font-size: 0.85rem; font-weight: 400; letter-spacing: 0; text-transform: none; gap: 0.6rem; }
+.bar .brand img { height: 1.5rem; }
+.bar nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+.linkbtn { font: inherit; color: var(--tan); background: none; border: 0; padding: 0.25rem 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.linkbtn:hover { color: #fff; }
+
+dialog { color-scheme: light; background: var(--paper); color: var(--navy); border: 0; border-radius: 8px; padding: 0;
+  width: min(34rem, calc(100% - 2rem)); max-height: calc(100% - 2rem); overflow: auto; }
+dialog::backdrop { background: rgba(24, 31, 64, 0.72); }
+.dlg-in { padding: clamp(1.25rem, 4vw, 2rem); }
+.dlg-in h2 { font: 600 1.5rem/1.2 var(--serif); margin: 0 0 1rem; }
+.dlg-in p { margin: 0 0 0.9rem; }
+.dlg-in ul { margin: 0 0 0.9rem; padding-left: 1.3rem; }
+.dlg-in li { margin-bottom: 0.4rem; }
+.dlg-in .eyebrow { margin-top: 1.1rem; }
+.dlg-foot { display: flex; justify-content: flex-end; margin-top: 1.25rem; }
+
+#confetti { position: fixed; inset: 0; z-index: 50; pointer-events: none; }
+</style>
+
+<main style="display:contents">
+  <section id="welcome" class="screen fade" aria-live="polite">
+    <div class="mark"><img class="logo" src="assets/julogo.png" alt="Jamestown University logo"><div class="rule"></div></div>
+    <h1>Welcome to the Jamestown University team</h1>
+  </section>
+
+  <section id="pick" class="screen" hidden>
+    <div class="rule"></div>
+    <p class="lead fade" id="lead">Please complete this quick orientation to get settled into your new role. This will take less than 5 minutes. You are encouraged to take notes.</p>
+    <div class="depts fade" id="depts" role="group" aria-label="Choose your department" inert></div>
+  </section>
+
+  <section id="step" class="screen" hidden>
+    <div class="top">
+      <span class="brand"><img src="assets/julogo.png" alt="">Jamestown University</span>
+      <span id="count"></span>
+    </div>
+    <div class="segs" id="segs" aria-hidden="true"></div>
+    <div class="panel">
+      <p class="eyebrow" id="phase"></p>
+      <h2 id="title" tabindex="-1"></h2>
+      <div id="body"></div>
+      <div class="foot">
+        <button class="btn ghost" id="back" type="button"></button>
+        <button class="btn" id="next" type="button" disabled><i class="fill" id="fill"></i><span id="nextlabel"></span></button>
+      </div>
+      <div class="sr" id="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="finish" class="screen" hidden>
+    <div class="finish-grid">
+      <div>
+        <div class="rule"></div>
+        <h1>Orientation complete</h1>
+        <p class="lead" id="finish-text" style="margin-top:1.25rem"></p>
+        <button class="dept" id="review" type="button" style="max-width:16rem"><b>Review from the start</b></button>
+      </div>
+      <img class="grad" src="assets/graduate1.png" alt="">
+    </div>
+  </section>
+</main>
+
+<footer class="bar">
+  <span class="brand"><img src="assets/julogo.png" alt="">This site does not track any data.</span>
+  <nav aria-label="Site information">
+    <button class="linkbtn" type="button" data-info="privacy">Data &amp; privacy</button>
+    <button class="linkbtn" type="button" data-info="cookies">Cookies</button>
+    <button class="linkbtn" type="button" data-info="links">Convenient links</button>
+  </nav>
+</footer>
+
+<dialog id="dlg" aria-labelledby="dlg-title">
+  <div class="dlg-in">
+    <h2 id="dlg-title"></h2>
+    <div id="dlg-body"></div>
+    <div class="dlg-foot"><button class="btn" id="dlg-close" type="button"><span>Close</span></button></div>
+  </div>
+</dialog>
+
+<canvas id="confetti" aria-hidden="true" hidden></canvas>
+
+<script>
+(function () {
+  var HOLD = 5000;
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function (s) { return document.querySelector(s); };
+  var a = function (h, t) { return '<a href="' + h + '" target="_blank" rel="noopener noreferrer">' + t + '</a>'; };
+  var ch = function (t) { return '<span class="ch">' + t + '</span>'; };
+  var rows = function (list) {
+    return '<dl class="rows">' + list.map(function (r) {
+      return '<div class="row"><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>';
+    }).join('') + '</dl>';
+  };
+  var GROUP = 'https://www.roblox.com/communities/570303173/Jamestown-University#!/about';
+  var SITE = 'https://jamestownuniversityrblx.vercel.app/';
+  var PROGRAMS = 'https://docs.google.com/document/d/1_wrPu8elmGM6KnkHXpfkylSe6zufMmaD8biBRPDreCs/edit?usp=sharing';
+
+  // Optional images: if a file is missing, drop it quietly.
+  document.addEventListener('error', function (e) {
+    var t = e.target;
+    if (t && t.tagName === 'IMG') {
+      if (t.parentNode && t.parentNode.classList.contains('mark')) t.parentNode.classList.add('nologo');
+      t.remove();
+    }
+  }, true);
+
+  var general = [
+    { title: 'About Jamestown University', html:
+      '<p>Jamestown University (JU) was established in 2025 by NolanSkadden to address the growing shortage of qualified legal professionals in ro-states.</p>' +
+      '<p>It was originally conceived to foster community and rehabilitation, not to serve solely as an educational institution.</p>' +
+      '<p>JU has four departments: Administration (the central university staff), the School of Business, the School of Law and the School of Aviation. Read the ' + ch('#information') + ' channel for more lore.</p>' },
+    { title: 'Getting set up', html:
+      '<p>Follow these steps in order:</p><ol>' +
+      '<li>Make a ' + ch('#credentials-request') + '. Your Discord nickname must follow the naming guide in the first message of ' + ch('#staff-bulletin') + '.</li>' +
+      '<li>Once you have your credentials, log in at ' + a(SITE, 'jamestownuniversityrblx.vercel.app') + '.</li>' +
+      '<li>If you need level 1 or 2 access, make a separate ' + ch('#credentials-request') + '.</li>' +
+      '<li>Review ' + ch('#staff-bulletin') + '. It holds all of the essential documents.</li>' +
+      '<li>Join the ' + a(GROUP, 'JU Roblox group') + '. If you are not accepted within 48 hours, ping ' + ch('@University Leadership') + '.</li></ol>' },
+    { title: 'How JU is organized', html:
+      rows([
+        ['Board of Governors', 'Appointed positions. The Board votes on leadership changes and institutional changes.'],
+        ['President', 'Appointed chief executive of JU. The Chancellor is also appointed, in a non-administrative role.'],
+        ['Vice President of Administration', 'Leads the non-academic offices and personnel. The Director of Administration reports here, with the Administration Specialists and Student Affairs Specialists below.'],
+        ['Provost', 'Oversees all academic departments, faculty and programs. The Deans of Law, Business and Aviation report to the Provost, with Associate Deans, Professors and Associate Professors below each Dean.'],
+        ['Department Chairs and Program Chairs', 'The same rank. They sit between Professors and Associate Deans.']
+      ]) +
+      '<p>The current org chart and the personnel tracker are pinned in ' + ch('#staff-bulletin') + '.</p>' },
+    { title: 'Staff levels and website access', html:
+      '<p>Your level sets what you can do on the staff website.</p>' +
+      rows([
+        ['Level 0', 'Part-time or new staff with minimal permissions: Associate Professors, Interns and Teaching Assistants. No access to the staff panel.'],
+        ['Level 1', 'Primary personnel with staff panel access, usually grading examinations and answering support tickets. Can write announcements, host classes or respond to tickets (depending on role), assign courses and use role-based staff emails.'],
+        ['Level 2', 'Managers. Everything Level 1 can do, plus deleting or deactivating announcements, posting to the Public Journal, revoking Level 1 authorization and changing a student’s program.'],
+        ['Level 3', 'Directors. Everything Level 2 can do, plus removing Public Journal posts, revoking Level 1 and 2 authorization and promoting staff to any level.'],
+        ['Technical access', 'Frontend access reaches GitHub and the source code. Backend access reaches the database. Engineer access reaches everything.']
+      ]) },
+    { title: 'Leave and promotions', html:
+      '<p>If you plan a very long leave of absence, post in ' + ch('#loa-notice') + '. A leave of absence is never denied or held against you. It is a courtesy so leadership knows you will be away.</p>' +
+      '<p>Promotions are based on merit and individual contributions. Contributions are tracked in the Google Sheets employee tracker, and the link is in ' + ch('#staff-bulletin') + '.</p>' +
+      '<p>Most questions are answered in your handbook, so read it through.</p>' }
+  ];
+
+  function profSteps(o) {
+    var chair = o.chair ? '<li>' + o.chair + '</li>' : '';
+    return [
+      { title: 'Your first tasks', html:
+        '<ol><li>Name yourself using the Naming Guide in ' + ch('#staff-bulletin') + '.</li>' +
+        '<li>Learn your department’s programs and org chart.</li></ol>' +
+        '<p>' + o.who + '</p>' },
+      { title: 'Teaching and contributing', html:
+        '<ul><li>Hosting classes is optional but encouraged.</li>' +
+        '<li>Substantial contributions to curriculum or teaching could be rewarded with a degree.</li>' +
+        '<li>Associate Professors are part-time or junior positions. They help grade exams and papers, assist with classes and keep a presence. They are Level 0 and do not have staff panel access.</li>' +
+        '<li>Admissions are handled mainly at the school level. The university administration team can step in and help when asked.</li></ul>' },
+      { title: 'School leadership and approvals', html:
+        '<ul><li>Only Associate Deans and Deans count as School Leadership. They manage their personnel without needing approval from University Leadership.</li>' +
+        '<li>Department Chairs and Program Chairs hold the same rank. They sit between Professors and Associate Deans.</li>' +
+        chair +
+        '<li>A graduate degree is a strong preference for leadership roles (Associate Dean and above).</li>' +
+        '<li>Appointing or removing anyone in a School Leadership position needs the approval of the President. The Board of Governors can reverse the President’s decision.</li></ul>' }
+    ];
+  }
+
+  var tickets = rows([
+    ['“When are you opening?”', 'Intakes are announced in ' + ch('#announcements') + '.'],
+    ['Program questions', 'Point them to the ' + a(PROGRAMS, 'programs document') + '.'],
+    ['Legal or compliance questions', 'Main website page › View Public Records › Registration tab.'],
+    ['Reporting a Code of Conduct violation or a criminal report', 'Main website page › Make a Campus Security Report.'],
+    ['“How do I apply for staff?”', 'Open an Employment Support ticket.'],
+    ['“I can’t log in!”', 'Clear the cache and refresh, then try an incognito tab. If that fails, open a technical-support ticket.'],
+    ['“I graduated. Can I still attend events?”', 'Yes. Alumni can attend all events.'],
+    ['“Do I reapply for a graduate program after my bachelor’s?”', 'Yes. Apply through the website.']
+  ]);
+
+  var DEPTS = {
+    admin: {
+      name: 'Administration', tag: 'Central staff',
+      blurb: 'Onboarding, hiring, student affairs and events.',
+      steps: [
+        { title: 'Administration Specialists', html:
+          '<p>Administration Specialists are part of the University Administration team. They handle employee matters and external affairs, and they support day-to-day operations and engagement. You will:</p>' +
+          '<ul><li>Coordinate and attend events</li><li>Stay active so JU feels alive</li><li>Represent the institution and advertise it</li><li>Help with employee onboarding</li><li>Search for new talent and partnerships</li></ul>' },
+        { title: 'How to interview new applicants', html:
+          '<p>After the Director of Administration (or their delegate) posts a job, use these steps:</p><ol>' +
+          '<li>Ask about relevant experience. Law professors need a BAR licence. Business professors need a background in management or leadership.</li>' +
+          '<li>Ask for their records. If there are any, refer them to the Director of Administration.</li>' +
+          '<li>Ask about their experience in the field you are hiring for, any previous education experience, their strengths and weaknesses, and how they would cultivate students’ learning.</li>' +
+          '<li>Ask for proof of 2FA on Discord and Roblox, with a timestamp showing the date and time.</li>' +
+          '<li>Write a summary of what you gathered and recommend whether to hire. Notify the Director of Administration, who holds final approval over all hiring.</li></ol>' },
+        { title: 'Student Affairs Specialists', html:
+          '<p>Student Affairs Specialists are part of the University Administration team and handle student matters. You will:</p>' +
+          '<ul><li>Coordinate and attend events</li><li>Stay active so JU feels alive</li><li>Answer Student Affairs tickets</li></ul>' },
+        { title: 'How to respond to tickets', html: tickets }
+      ],
+      contacts: [
+        ['Hiring, applicant records or final approvals', 'Director of Administration'],
+        ['Leadership of non-academic offices', 'Vice President of Administration']
+      ]
+    },
+    business: {
+      name: 'School of Business', tag: 'JU-SOB',
+      blurb: 'Faculty led by the Dean of the School of Business.',
+      steps: profSteps({ who: 'Business professors need a background in management or leadership.' }),
+      contacts: [['Your school, classes or programs', 'Your Associate Dean or the Dean of the School of Business']]
+    },
+    law: {
+      name: 'School of Law', tag: 'JU-SOL',
+      blurb: 'Faculty led by the Dean of the School of Law.',
+      steps: profSteps({ who: 'Law professors need a BAR licence.' }),
+      contacts: [['Your school, classes or programs', 'Your Associate Dean or the Dean of the School of Law']]
+    },
+    aviation: {
+      name: 'School of Aviation', tag: 'JU-SOA',
+      blurb: 'Departments of Flight Operations and Aviation Management.',
+      steps: profSteps({
+        who: 'JU-SOA has two departments: Flight Operations and Aviation Management.',
+        chair: 'Each department is led by a Department Chair, who is responsible for their own department and can also help other departments within the school.'
+      }),
+      contacts: [
+        ['Your department', 'Your Department Chair'],
+        ['Your school, classes or programs', 'Your Associate Dean or the Dean of the School of Aviation']
+      ]
+    }
+  };
+
+  function contactsHtml(d) {
+    var all = [
+      ['Credentials or access levels', 'Make a ' + ch('#credentials-request')],
+      ['Not accepted into the Roblox group after 48 hours', 'Ping ' + ch('@University Leadership')],
+      ['Can’t log in to the website', 'Open a technical-support ticket'],
+      ['Onboarding help', 'Any Administration Specialist'],
+      ['Documents, org chart and the employee tracker', 'Check ' + ch('#staff-bulletin')],
+      ['A long leave of absence', 'Post in ' + ch('#loa-notice')]
+    ];
+    return '<div class="contact-lead"><p>Start with your own department, then use the general list. Questions are always welcome.</p>' +
+      '<img src="assets/suit1.png" alt=""></div>' +
+      '<p class="eyebrow">Your department</p>' + rows(d.contacts) +
+      '<p class="eyebrow" style="margin-top:1.1rem">Everyone</p>' + rows(all);
+  }
+
+  var INFO = {
+    privacy: { title: 'Data & privacy', html:
+      '<p>This orientation site does not track you. It has no analytics, no advertising, no accounts and no forms, and it does not collect or store personal data.</p>' +
+      '<ul>' +
+      '<li>Nothing you do here is saved. Your progress exists only in this browser tab and disappears when you close or refresh the page.</li>' +
+      '<li>The page’s fonts load from Google Fonts. As with any web request, Google can see your IP address when your browser fetches them. This site does not receive or use that information.</li>' +
+      '<li>The page is delivered by its hosting provider, which may keep basic server logs under its own policy.</li>' +
+      '<li>Outside services you open from here, such as Roblox, Discord and Google Docs, have their own privacy policies.</li></ul>' +
+      '<p>Because this site holds no personal data about you, there is nothing to access, correct or delete. If you have a question, ask University Leadership in the JU Discord.</p>' },
+    cookies: { title: 'Cookies', html:
+      '<p>This site does not set any cookies. It also does not use local storage, session storage or any similar technology to remember you.</p>' +
+      '<p>Since nothing is stored on your device, there is no cookie banner and no consent to manage.</p>' +
+      '<p>Outside services you open from here, such as Roblox or Google Docs, may set their own cookies once you visit them. Check their cookie settings for details.</p>' },
+    links: { title: 'Convenient links', html:
+      '<p class="eyebrow" style="margin-top:0">Websites</p>' +
+      rows([
+        ['Staff website', a(SITE, 'jamestownuniversityrblx.vercel.app')],
+        ['JU Roblox group', a(GROUP, 'Open the group page')],
+        ['Programs document', a(PROGRAMS, 'Open the document')]
+      ]) +
+      '<p class="eyebrow">Discord channels</p>' +
+      rows([
+        [ch('#credentials-request'), 'Request credentials or access levels'],
+        [ch('#staff-bulletin'), 'Naming guide, org chart, personnel tracker and essential documents'],
+        [ch('#loa-notice'), 'Tell leadership about a long leave of absence'],
+        [ch('#announcements'), 'Intake dates'],
+        [ch('#information'), 'JU lore']
+      ]) }
+  };
+
+  var dlg = $('#dlg');
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-info]');
+    if (!b) return;
+    var i = INFO[b.getAttribute('data-info')];
+    $('#dlg-title').textContent = i.title;
+    $('#dlg-body').innerHTML = i.html;
+    dlg.showModal();
+    dlg.scrollTop = 0;
+  });
+  $('#dlg-close').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+
+  var dept = null, steps = [], idx = 0, done = {}, elapsed = 0, last = 0, raf = 0;
+
+  function show(id) {
+    ['welcome', 'pick', 'step', 'finish'].forEach(function (s) { $('#' + s).hidden = (s !== id); });
+  }
+
+  $('#depts').innerHTML = Object.keys(DEPTS).map(function (k) {
+    var d = DEPTS[k];
+    return '<button class="dept" type="button" data-k="' + k + '"><small>' + d.tag + '</small><b>' + d.name + '</b><span>' + d.blurb + '</span></button>';
+  }).join('');
+  $('#depts').addEventListener('click', function (e) {
+    var b = e.target.closest('.dept');
+    if (b) begin(b.getAttribute('data-k'));
+  });
+
+  function intro() {
+    var w = $('#welcome'), f = rm ? 0 : 1200, hold = rm ? 1800 : 2600;
+    setTimeout(function () { w.classList.add('show'); }, 60);
+    var t1 = 60 + f + hold;
+    setTimeout(function () { w.classList.remove('show'); }, t1);
+    var t2 = t1 + f + 250;
+    setTimeout(function () {
+      show('pick');
+      setTimeout(function () { $('#lead').classList.add('show'); }, 60);
+    }, t2);
+    var t3 = t2 + 60 + f + (rm ? 600 : 2600);
+    setTimeout(function () {
+      var d = $('#depts'); d.inert = false; d.classList.add('show');
+    }, t3);
+  }
+
+  function begin(k) {
+    dept = DEPTS[k]; done = {}; idx = 0;
+    steps = [].concat(
+      general.map(function (s) { return { phase: 'General information', title: s.title, html: s.html }; }),
+      dept.steps.map(function (s) { return { phase: 'Your role · ' + dept.name, title: s.title, html: s.html }; }),
+      [{ phase: 'Contacts', title: 'Who to contact', html: contactsHtml(dept) }]
+    );
+    $('#segs').innerHTML = steps.map(function (s, i) {
+      return '<span class="seg' + (i && steps[i - 1].phase !== s.phase ? ' gap' : '') + '"></span>';
+    }).join('');
+    show('step');
+    render();
+  }
+
+  function render() {
+    var s = steps[idx], lastStep = idx === steps.length - 1;
+    $('#phase').textContent = s.phase;
+    $('#title').textContent = s.title;
+    $('#body').innerHTML = s.html;
+    $('#count').textContent = 'Step ' + (idx + 1) + ' of ' + steps.length;
+    Array.prototype.forEach.call($('#segs').children, function (el, i) {
+      el.className = 'seg' + (el.className.indexOf('gap') > -1 ? ' gap' : '') + (done[i] ? ' done' : '') + (i === idx ? ' cur' : '');
+    });
+    $('#back').textContent = idx === 0 ? 'Change department' : 'Back';
+    $('#nextlabel').textContent = lastStep ? 'Finish orientation' : 'Continue';
+    elapsed = 0;
+    cancelAnimationFrame(raf);
+    update();
+    if (!done[idx]) { last = performance.now(); raf = requestAnimationFrame(loop); }
+    window.scrollTo(0, 0);
+    $('#title').focus({ preventScroll: true });
+  }
+
+  function loop(now) {
+    var dt = now - last; last = now;
+    if (!document.hidden) elapsed += Math.min(dt, 100);
+    update();
+    if (!done[idx]) raf = requestAnimationFrame(loop);
+  }
+
+  function update() {
+    if (elapsed >= HOLD && !done[idx]) {
+      done[idx] = true;
+      $('#status').textContent = 'You can continue now.';
+      var seg = $('#segs').children[idx];
+      if (seg) seg.className += ' done';
+    }
+    var ok = !!done[idx];
+    $('#fill').style.transform = 'scaleX(' + (ok ? 1 : Math.min(1, elapsed / HOLD)) + ')';
+    $('#next').disabled = !ok;
+  }
+
+  $('#next').addEventListener('click', function () {
+    if (!done[idx]) return;
+    if (idx === steps.length - 1) { finish(); return; }
+    idx++; render();
+  });
+  $('#back').addEventListener('click', function () {
+    cancelAnimationFrame(raf);
+    if (idx === 0) {
+      show('pick'); $('#lead').classList.add('show');
+      var d = $('#depts'); d.inert = false; d.classList.add('show');
+      return;
+    }
+    idx--; render();
+  });
+  $('#review').addEventListener('click', function () { idx = 0; show('step'); render(); });
+
+  function finish() {
+    cancelAnimationFrame(raf);
+    $('#finish-text').textContent = 'You are ready to start in ' + dept.name + '. If you have questions, use the contacts from the last section or check #staff-bulletin.';
+    show('finish');
+    window.scrollTo(0, 0);
+    confetti();
+  }
+
+  function confetti() {
+    if (rm) return;
+    var c = $('#confetti'), g = c.getContext('2d'), dpr = window.devicePixelRatio || 1;
+    var W = window.innerWidth, H = window.innerHeight, DUR = 4200;
+    c.width = W * dpr; c.height = H * dpr; c.style.width = W + 'px'; c.style.height = H + 'px';
+    c.hidden = false; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var cols = ['#DAC5B4', '#2850A8', '#848FAC', '#FFFFFF', '#EFE5DC'], P = [], i;
+    for (i = 0; i < 140; i++) {
+      var left = i % 2 === 0;
+      var ang = (left ? -62 : -118) * Math.PI / 180 + (Math.random() - 0.5) * 0.7;
+      var sp = H * (0.018 + Math.random() * 0.014);
+      P.push({ x: left ? W * 0.08 : W * 0.92, y: H * 0.98, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp,
+        w: 6 + Math.random() * 6, h: 3 + Math.random() * 4, r: Math.random() * 6.28, vr: (Math.random() - 0.5) * 0.3,
+        col: cols[Math.floor(Math.random() * cols.length)] });
+    }
+    var t0 = performance.now(), prev = t0;
+    function frame(now) {
+      var t = now - t0, k = Math.min((now - prev) / 16.7, 3); prev = now;
+      g.clearRect(0, 0, W, H);
+      if (t > DUR) { c.hidden = true; return; }
+      g.globalAlpha = t > DUR * 0.75 ? Math.max(0, (DUR - t) / (DUR * 0.25)) : 1;
+      P.forEach(function (p) {
+        p.vx *= 0.992; p.vy += H * 0.00035 * k;
+        p.x += p.vx * k; p.y += p.vy * k; p.r += p.vr * k;
+        g.save(); g.translate(p.x, p.y); g.rotate(p.r); g.fillStyle = p.col; g.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); g.restore();
+      });
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  intro();
+})();
+</script>
