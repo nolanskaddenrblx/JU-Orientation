@@ -245,6 +245,7 @@ dialog.wide { width: calc(100% - 2rem); max-width: calc(1440px + 4.5rem); }
   var SITE = 'https://jamestownuniversityrblx.vercel.app/';
   var PROGRAMS = 'https://docs.google.com/document/d/1_wrPu8elmGM6KnkHXpfkylSe6zufMmaD8biBRPDreCs/edit?usp=sharing';
   var STATUTES = 'https://docs.google.com/spreadsheets/d/1djyPYIhVZFxuS9ifpqu85d2Zr0T18ndRk9tNrE__BAY/edit?gid=1788658391#gid=1788658391';
+  var HANDBOOK = 'https://docs.google.com/document/d/1ZvC_Ntq5Gvarez1QD_sGuo8tIHyb4rc7hOFOGmFcSmw/edit?usp=sharing';
 
   // Org chart. Each box: [color, left, top, width, height, title, description].
   var OC_BOXES = [
@@ -323,7 +324,7 @@ dialog.wide { width: calc(100% - 2rem); max-width: calc(1440px + 4.5rem); }
       '<p>The university website used to have staff login and campus security. Both are temporarily suspended while University Leadership prioritizes other things and works to ensure safety.</p>' },
     { title: 'Getting set up', html:
       '<div class="lead-row"><p>Follow these steps in order:</p>' + side('assets/y6.png', 'A Jamestown University staff member at a desk, smiling') + '</div><ol>' +
-      '<li><s>Complete this orientation.</s> Done: you’re reading it now.</li>' +
+      '<li>Follow the format in the ' + ch('#new-employee-registration') + ' channel.</li>' +
       '<li>Set your Discord nickname using the naming guide in the first message of ' + ch('#staff-bulletin') + '.</li>' +
       '<li>Review ' + ch('#staff-bulletin') + '. It holds all of the essential documents.</li>' +
       '<li>Join the ' + a(GROUP, 'JU Roblox group') + '. If you are not accepted within 48 hours, ping ' + ch('@University Leadership') + '.</li></ol>' },
@@ -331,10 +332,10 @@ dialog.wide { width: calc(100% - 2rem); max-width: calc(1440px + 4.5rem); }
       '<p>Leadership and staff fit together like this. <button class="linkbtn" type="button" data-info="chart">View the chart full size</button></p>' +
       orgChart() +
       '<p>The current org chart and the personnel tracker are pinned in ' + ch('#staff-bulletin') + '.</p>' },
-    { title: 'Leave and promotions', html:
-      '<p>If you plan a very long leave of absence, post in ' + ch('#loa-notice') + '. A leave of absence is never denied or held against you. It is a courtesy so leadership knows you will be away.</p>' +
-      '<p>Promotions are based on merit and individual contributions. Contributions are tracked in the Google Sheets employee tracker, and the link is in ' + ch('#staff-bulletin') + '.</p>' +
-      '<p>Most questions are answered in your handbook, so read it through.</p>' }
+    { title: 'Leave and growth', html:
+      '<p>Taking a long leave? Post in ' + ch('#loa-notice') + ' so leadership knows you’re away. Leave is never denied or held against you.</p>' +
+      '<p>Promotions are merit-based. Your contributions are tracked in the employee tracker (Google Sheets), linked in ' + ch('#staff-bulletin') + '.</p>' +
+      '<p>Read the ' + a(HANDBOOK, 'Employee Handbook') + '. It answers most questions and includes a guide to earning a degree as a staff member.</p>' }
   ];
 
   function profSteps(o) {
